@@ -1,12 +1,34 @@
 plugins {
     kotlin("jvm") version "2.1.0"
+    `maven-publish`
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "com.rodwan"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = project.group.toString()
+            artifactId = "shopping-cart-core-api"
+            version = project.version.toString()
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Rodwan-Bakkar/shopping-cart-core-api")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("MAVEN_USERNAME")
+                password = project.findProperty("gpr.token") as String? ?: System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
 }
 
 dependencies {
