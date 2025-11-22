@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0"
-    `maven-publish`
+    id("com.vanniktech.maven.publish") version "0.35.0"
 }
 
 group = "com.rodwan"
@@ -10,27 +10,6 @@ repositories {
     mavenCentral()
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = project.group.toString()
-            artifactId = "shopping-cart-core-api"
-            version = project.version.toString()
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Rodwan-Bakkar/shopping-cart-core-api")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("MAVEN_USERNAME")
-                password = project.findProperty("gpr.token") as String? ?: System.getenv("MAVEN_PASSWORD")
-            }
-        }
-    }
-}
-
 dependencies {
     testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -38,6 +17,36 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+mavenPublishing {
+    coordinates("io.github.rodwan-bakkar", "coreapi", version.toString())
+
+    pom {
+        name.set("Shopping Cart Core API")
+        description.set("A shared library containing commands, events and DTOs")
+        inceptionYear.set("2020")
+        url.set("https://github.com/Rodwan-Bakkar/shopping-cart-core-api")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+        developers {
+            developer {
+                id.set("Rodwan-Bakkar")
+                name.set("Rodwan Bakkar")
+                url.set("https://github.com/Rodwan-Bakkar/")
+            }
+        }
+        scm {
+            url.set("https://github.com/Rodwan-Bakkar/shopping-cart-core-api")
+            connection.set("scm:git:git://github.com:Rodwan-Bakkar/shopping-cart-core-api.git")
+            developerConnection.set("scm:git:ssh://git@github.com:Rodwan-Bakkar/shopping-cart-core-api.git")
+        }
+    }
 }
 
 tasks.test {
