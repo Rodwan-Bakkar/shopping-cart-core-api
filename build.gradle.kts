@@ -19,6 +19,17 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+// This block explicitly tells the underlying Gradle Signing Plugin (applied automatically by the vanniktech plugin)
+// how to load the PGP private key from CI secrets.
+signing {
+    val signingKey = project.findProperty("signingInMemoryKey") as String
+    val signingPassphrase = project.findProperty("signingPassword") as String
+
+    if (signingKey.isNotEmpty()) {
+        useInMemoryPgpKeys(signingKey, signingPassphrase)
+    }
+}
+
 mavenPublishing {
     coordinates("io.github.rodwan-bakkar", "coreapi", version.toString())
 
