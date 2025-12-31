@@ -1,5 +1,6 @@
 package com.rodwan.coreapi.events
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.time.Instant
@@ -21,5 +22,6 @@ interface Event {
     val aggregateId: String
     val timestamp: Instant
 
+    @JsonIgnore
     fun getEventType(): String = this::class.simpleName ?: "UnknownEvent"
 }
