@@ -5,6 +5,7 @@ import java.time.Instant
 
 data class CartCheckedOutEvent(
     override val aggregateId: String,
+    val orderId: String,
     val totalAmount: BigDecimal,
     val itemCount: Int,
     val shippingAddress: String,
